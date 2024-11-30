@@ -142,16 +142,20 @@ class YaruTheme extends StatefulWidget {
 class _YaruThemeState extends State<YaruTheme> {
   YaruVariant? _variant;
   YaruSettings? _settings;
+  final Map<String, List<String>?> _customTitleButtonLayout = {
+    'left': null,
+    'right': null,
+  };
   StreamSubscription<String?>? _themeNameSubscription;
   StreamSubscription<String?>? _accentColorSubScription;
   StreamSubscription<bool?>? _statusShapesSubscription;
-
+  StreamSubscription<String?>? _buttonLayoutSubscription;
   bool? _statusShapes;
 
   @override
   void initState() {
     super.initState();
-    if (widget.data.variant == null && canDetectVariant()) {
+    if (canDetectGnome()) {
       _settings = widget._settings ?? YaruSettings();
 
       _settings?.init();
@@ -169,7 +173,15 @@ class _YaruThemeState extends State<YaruTheme> {
           _statusShapes = v;
         }),
       );
-      _settings?.getStatusShapes();
+      _statusShapes = _settings?.getStatusShapes();
+      _buttonLayoutSubscription ??= _settings!.buttonLayoutChanged.listen(
+        updateButtonLayout,
+      );
+      final buttons = _settings?.getButtonLayout()?.split(':');
+      _customTitleButtonLayout['left'] =
+          buttons?.firstOrNull?.split(',') ?? <String>[];
+      _customTitleButtonLayout['right'] =
+          buttons?.lastOrNull?.split(',') ?? <String>[];
     }
   }
 
@@ -178,11 +190,12 @@ class _YaruThemeState extends State<YaruTheme> {
     _themeNameSubscription?.cancel();
     _accentColorSubScription?.cancel();
     _statusShapesSubscription?.cancel();
+    _buttonLayoutSubscription?.cancel();
     _settings?.dispose();
     super.dispose();
   }
 
-  bool canDetectVariant() {
+  bool canDetectGnome() {
     return !kIsWeb &&
         widget._platform.isLinux &&
         !widget._platform.environment.containsKey('FLUTTER_TEST');
@@ -235,7 +248,7 @@ class _YaruThemeState extends State<YaruTheme> {
   };
 
   void updateVariant([String? value]) {
-    assert(canDetectVariant());
+    assert(canDetectGnome());
     final gtkThemeName = value ?? _settings?.getThemeName();
     final accentColor = value ?? _settings?.getAccentColor();
     setState(
@@ -243,6 +256,24 @@ class _YaruThemeState extends State<YaruTheme> {
           resolveAccentColorVariant(accentColor) ??
           resolveGtkThemeVariant(gtkThemeName),
     );
+  }
+
+  void updateButtonLayout([String? value]) {
+    assert(canDetectGnome());
+    final buttonLayout = value ?? _settings?.getButtonLayout();
+
+    final buttons = buttonLayout?.split(':');
+
+    setState(() {
+      _customTitleButtonLayout.update(
+        'left',
+        (value) => buttons?.firstOrNull?.split(',') ?? <String>[],
+      );
+      _customTitleButtonLayout.update(
+        'right',
+        (value) => buttons?.lastOrNull?.split(',') ?? [],
+      );
+    });
   }
 
   ThemeMode resolveMode() {
@@ -262,6 +293,8 @@ class _YaruThemeState extends State<YaruTheme> {
           widget.data.highContrast ?? MediaQuery.highContrastOf(context),
       themeMode: resolveMode(),
       statusShapes: _statusShapes,
+      customTitleButtonLayout:
+          widget.data.customTitleButtonLayout ?? _customTitleButtonLayout,
     );
   }
 
@@ -303,10 +336,19 @@ class YaruThemeData with Diagnosticable {
     this.visualDensity,
     this.statusShapes,
     this.focusBorders = true,
+    this.customTitleButtonLayout,
   });
 
   /// Specifies the theme variant.
   final YaruVariant? variant;
+
+  final Map<String, List<String>?>? customTitleButtonLayout;
+
+  bool get hasLeftWindowControls =>
+      customTitleButtonLayout?['left']?.isNotEmpty ?? false;
+
+  bool get hasRightWindowControls =>
+      customTitleButtonLayout?['right']?.isNotEmpty ?? false;
 
   /// Whether to use high contrast colors.
   final bool? highContrast;
@@ -350,6 +392,8 @@ class YaruThemeData with Diagnosticable {
     bool? useMaterial3,
     VisualDensity? visualDensity,
     bool? statusShapes,
+    bool? focusBorders,
+    Map<String, List<String>?>? customTitleButtonLayout,
   }) {
     return YaruThemeData(
       variant: variant ?? this.variant,
@@ -361,6 +405,8 @@ class YaruThemeData with Diagnosticable {
       visualDensity: visualDensity ?? this.visualDensity,
       statusShapes: statusShapes ?? this.statusShapes,
       focusBorders: focusBorders ?? this.focusBorders,
+      customTitleButtonLayout:
+          customTitleButtonLayout ?? this.customTitleButtonLayout,
     );
   }
 
@@ -378,6 +424,9 @@ class YaruThemeData with Diagnosticable {
     properties.add(DiagnosticsProperty('visualDensity', visualDensity));
     properties.add(DiagnosticsProperty<bool>('statusShapes', statusShapes));
     properties.add(DiagnosticsProperty<bool>('focusBorders', focusBorders));
+    properties.add(
+      DiagnosticsProperty('customTitleButtonLayout', customTitleButtonLayout),
+    );
   }
 
   @override
@@ -393,7 +442,8 @@ class YaruThemeData with Diagnosticable {
         other.useMaterial3 == useMaterial3 &&
         other.visualDensity == visualDensity &&
         other.statusShapes == statusShapes &&
-        other.focusBorders == focusBorders;
+        other.focusBorders == focusBorders &&
+        other.customTitleButtonLayout == customTitleButtonLayout;
   }
 
   @override
@@ -408,6 +458,7 @@ class YaruThemeData with Diagnosticable {
       visualDensity,
       statusShapes,
       focusBorders,
+      customTitleButtonLayout,
     );
   }
 }
