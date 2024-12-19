@@ -68,6 +68,7 @@ class YaruGtkSettings extends YaruSettings {
     _wmPrefSettings?.addListener(
       () => _buttonLayoutController.add(getButtonLayout()),
     );
+    getButtonLayout();
   }
 
   @override

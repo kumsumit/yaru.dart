@@ -264,14 +264,14 @@ class YaruTitleBar extends StatelessWidget implements PreferredSizeWidget {
       semanticLabel: closeSemanticLabel,
     );
 
-    final leftButtons = yaruTheme?.customTitleButtonLayout?['left']
+    final leftButtons = yaruTheme?.leftButtonLayout
             ?.map(YaruWindowControlType.fromName)
             .toList() ??
         <YaruWindowControlType>[];
 
     leftButtons.removeWhere((e) => e == null);
 
-    final rightButtons = yaruTheme?.customTitleButtonLayout?['right']
+    final rightButtons = yaruTheme?.rightButtonLayout
             ?.map(YaruWindowControlType.fromName)
             .toList() ??
         <YaruWindowControlType>[];
