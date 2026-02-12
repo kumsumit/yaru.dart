@@ -122,7 +122,7 @@ class _UbuntuTextStyle extends TextStyle {
     String? fontFamily,
     super.fontFamilyFallback,
   }) : super(
-         fontFamily: fontFamily ?? 'packages/yaru/Ubuntu',
+         fontFamily: fontFamily ?? 'packages/yaru/UbuntuSans',
          letterSpacing: 0, // Override Material/Flutter's letter spacing
        );
 }
