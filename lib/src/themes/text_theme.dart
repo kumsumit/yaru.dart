@@ -64,7 +64,7 @@ TextTheme createTextTheme({
     ),
     titleSmall: _UbuntuTextStyle(
       fontSize: 14.66,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.bold,
       color: textColor,
       fontFamily: fontFamily,
       fontFamilyFallback: fontFamilyFallback,
@@ -115,7 +115,7 @@ TextTheme createTextTheme({
 }
 
 class _UbuntuTextStyle extends TextStyle {
-  const _UbuntuTextStyle({
+  _UbuntuTextStyle({
     super.fontSize,
     super.fontWeight,
     required Color super.color,
@@ -124,5 +124,8 @@ class _UbuntuTextStyle extends TextStyle {
   }) : super(
          fontFamily: fontFamily ?? 'packages/yaru/UbuntuSans',
          letterSpacing: 0, // Override Material/Flutter's letter spacing
+         fontVariations: fontWeight != null
+             ? [FontVariation.weight(fontWeight.value.toDouble())]
+             : null,
        );
 }
