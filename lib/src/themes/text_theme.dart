@@ -124,8 +124,5 @@ class _UbuntuTextStyle extends TextStyle {
   }) : super(
          fontFamily: fontFamily ?? 'packages/yaru/UbuntuSans',
          letterSpacing: 0, // Override Material/Flutter's letter spacing
-         fontVariations: fontWeight != null
-             ? [FontVariation.weight(fontWeight.value.toDouble())]
-             : null,
        );
 }
