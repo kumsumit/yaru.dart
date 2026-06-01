@@ -1,5 +1,17 @@
 # Changelog
 
+## [10.2.0](https://github.com/ubuntu/yaru.dart/compare/v10.1.0...v10.2.0) (2026-06-01)
+
+
+### Features
+
+* accept fontFamily parameter in createYaruTheme ([#1075](https://github.com/ubuntu/yaru.dart/issues/1075)) ([72d662d](https://github.com/ubuntu/yaru.dart/commit/72d662d6e04fe0c1e824aa8cd2417f3be32209b2))
+
+
+### Bug Fixes
+
+* wrap ListTile in Material to fix invisible ink splashes in YaruMasterTile ([#1079](https://github.com/ubuntu/yaru.dart/issues/1079)) ([6461fdc](https://github.com/ubuntu/yaru.dart/commit/6461fdc9d2704a24172f5e994c040f1ca35005e6))
+
 ## [10.1.0](https://github.com/ubuntu/yaru.dart/compare/v10.0.0...v10.1.0) (2026-04-03)
 
 
