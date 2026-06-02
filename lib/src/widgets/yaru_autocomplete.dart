@@ -120,9 +120,17 @@ class _YaruAutocompleteState<T extends Object>
 
   void _announceResultsCount(int count, String text) {
     if (text.isEmpty) {
-      SemanticsService.announce('Input cleared', TextDirection.ltr);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        'Input cleared',
+        TextDirection.ltr,
+      );
     } else if (count == 0) {
-      SemanticsService.announce('No options found', TextDirection.ltr);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        'No options found',
+        TextDirection.ltr,
+      );
     } else {
       if (count == 1 && _latestOptions.isNotEmpty) {
         if (widget.displayStringForOption(_latestOptions.first) == text) {
@@ -132,7 +140,11 @@ class _YaruAutocompleteState<T extends Object>
       final message = count == 1
           ? '1 option available'
           : '$count options available';
-      SemanticsService.announce(message, TextDirection.ltr);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        message,
+        TextDirection.ltr,
+      );
     }
   }
 
@@ -141,7 +153,7 @@ class _YaruAutocompleteState<T extends Object>
   ) {
     _hasNavigated = false;
 
-    final Object currentToken = Object();
+    final currentToken = Object();
     _activeSearchToken = currentToken;
 
     final result = widget.optionsBuilder(textEditingValue);
@@ -184,7 +196,8 @@ class _YaruAutocompleteState<T extends Object>
                   _hasNavigated = true;
                   if (_latestOptions.isNotEmpty) {
                     final option = _latestOptions.first;
-                    SemanticsService.announce(
+                    SemanticsService.sendAnnouncement(
+                      View.of(context),
                       widget.displayStringForOption(option),
                       TextDirection.ltr,
                     );
@@ -209,7 +222,7 @@ class _YaruAutocompleteState<T extends Object>
       },
       initialValue: widget.initialValue,
       optionsBuilder: _wrappedOptionsBuilder,
-      onSelected: (T option) {
+      onSelected: (option) {
         widget.onSelected?.call(option);
         SchedulerBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
@@ -275,7 +288,8 @@ class _YaruAutocompleteOptionsState<T extends Object>
 
       if (highlighted >= 0 && highlighted < widget.options.length) {
         final option = widget.options.elementAt(highlighted);
-        SemanticsService.announce(
+        SemanticsService.sendAnnouncement(
+          View.of(context),
           widget.displayStringForOption(option),
           TextDirection.ltr,
         );

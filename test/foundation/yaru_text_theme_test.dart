@@ -18,7 +18,7 @@ void main() {
     });
     test('Font can be overridden with copyWith()', () {
       var textStyle = createTextTheme(textColor: Colors.black).bodyMedium!;
-      expect(textStyle.fontFamily, 'packages/yaru/Ubuntu');
+      expect(textStyle.fontFamily, 'packages/yaru/UbuntuSans');
       textStyle = textStyle.copyWith(fontFamily: 'Adwaita Sans', package: null);
       expect(
         textStyle.fontFamily,

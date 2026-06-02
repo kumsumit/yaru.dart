@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import '../../yaru_widgets.dart';
+import 'yaru_window_control.dart';
 
 class YaruWindowControlRow extends StatelessWidget {
   const YaruWindowControlRow({
@@ -54,8 +54,8 @@ class YaruWindowControlRow extends StatelessWidget {
               switch (type) {
                 case YaruWindowControlType.close:
                   return YaruWindowControl(
-                    foregroundColor: foregroundColor,
-                    backgroundColor: backgroundColor,
+                    iconColor: WidgetStatePropertyAll(foregroundColor),
+                    backgroundColor: WidgetStatePropertyAll(backgroundColor),
                     type: YaruWindowControlType.close,
                     onTap: onClose != null ? () => onClose!(context) : null,
                   );
@@ -63,16 +63,17 @@ class YaruWindowControlRow extends StatelessWidget {
                 case YaruWindowControlType.restore:
                   if (isMaximized == true) {
                     return YaruWindowControl(
-                      foregroundColor: foregroundColor,
-                      backgroundColor: backgroundColor,
+                      iconColor: WidgetStatePropertyAll(foregroundColor),
+                      backgroundColor: WidgetStatePropertyAll(backgroundColor),
                       type: YaruWindowControlType.restore,
-                      onTap:
-                          onRestore != null ? () => onRestore!(context) : null,
+                      onTap: onRestore != null
+                          ? () => onRestore!(context)
+                          : null,
                     );
                   } else {
                     return YaruWindowControl(
-                      foregroundColor: foregroundColor,
-                      backgroundColor: backgroundColor,
+                      iconColor: WidgetStatePropertyAll(foregroundColor),
+                      backgroundColor: WidgetStatePropertyAll(backgroundColor),
                       type: YaruWindowControlType.maximize,
                       onTap: onMaximize != null
                           ? () => onMaximize!(context)
@@ -81,11 +82,12 @@ class YaruWindowControlRow extends StatelessWidget {
                   }
                 case YaruWindowControlType.minimize:
                   return YaruWindowControl(
-                    foregroundColor: foregroundColor,
-                    backgroundColor: backgroundColor,
+                    iconColor: WidgetStatePropertyAll(foregroundColor),
+                    backgroundColor: WidgetStatePropertyAll(backgroundColor),
                     type: YaruWindowControlType.minimize,
-                    onTap:
-                        onMinimize != null ? () => onMinimize!(context) : null,
+                    onTap: onMinimize != null
+                        ? () => onMinimize!(context)
+                        : null,
                   );
               }
             })

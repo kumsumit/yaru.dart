@@ -156,12 +156,14 @@ class _YaruDayPickerState extends State<YaruDayPicker> {
         if (!yearSelectionMode)
           YaruIconButton(
             tooltip: MaterialLocalizations.of(context).previousMonthTooltip,
-            onPressed: () => setState(() {
-              displayedMonth = DateUtils.addMonthsToMonthDate(
-                displayedMonth,
-                -1,
-              );
-            }),
+            onPressed: DateUtils.isSameMonth(displayedMonth, widget.firstDate)
+                ? null
+                : () => setState(() {
+                    displayedMonth = DateUtils.addMonthsToMonthDate(
+                      displayedMonth,
+                      -1,
+                    );
+                  }),
             icon: const Icon(YaruIcons.pan_start),
           ),
         Expanded(
@@ -170,15 +172,18 @@ class _YaruDayPickerState extends State<YaruDayPicker> {
               onPressed: () => setState(() {
                 yearSelectionMode = !yearSelectionMode;
               }),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(DateFormat.yMMM().format(displayedMonth)),
-                  const SizedBox(width: 5),
-                  yearSelectionMode
-                      ? const Icon(YaruIcons.pan_up)
-                      : const Icon(YaruIcons.pan_down),
-                ],
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(DateFormat.yMMM().format(displayedMonth)),
+                    const SizedBox(width: 5),
+                    yearSelectionMode
+                        ? const Icon(YaruIcons.pan_up)
+                        : const Icon(YaruIcons.pan_down),
+                  ],
+                ),
               ),
             ),
           ),
@@ -186,12 +191,14 @@ class _YaruDayPickerState extends State<YaruDayPicker> {
         if (!yearSelectionMode)
           YaruIconButton(
             tooltip: MaterialLocalizations.of(context).nextMonthTooltip,
-            onPressed: () => setState(() {
-              displayedMonth = DateUtils.addMonthsToMonthDate(
-                displayedMonth,
-                1,
-              );
-            }),
+            onPressed: DateUtils.isSameMonth(displayedMonth, widget.lastDate)
+                ? null
+                : () => setState(() {
+                    displayedMonth = DateUtils.addMonthsToMonthDate(
+                      displayedMonth,
+                      1,
+                    );
+                  }),
             icon: const Icon(YaruIcons.pan_end),
           ),
       ],
@@ -233,20 +240,25 @@ class _YaruDayPickerState extends State<YaruDayPicker> {
         final now = DateTime.now();
         final selected = DateUtils.isSameDay(day, selectedDay);
         final currentMonth = DateUtils.isSameMonth(day, displayedMonth);
-        final today = day.day == now.day && currentMonth;
+        final today = DateUtils.isSameDay(day, now);
+        final enabled =
+            !day.isBefore(DateUtils.dateOnly(widget.firstDate)) &&
+            !day.isAfter(DateUtils.dateOnly(widget.lastDate));
 
         return _YaruDayButton(
           day: day,
           today: today,
           selected: selected,
           currentMonth: currentMonth,
-          onTap: () => setState(() {
-            selectedDay = day;
-            if (!DateUtils.isSameMonth(day, displayedMonth)) {
-              displayedMonth = day;
-            }
-            widget.onDaySelected?.call(day);
-          }),
+          onTap: enabled
+              ? () => setState(() {
+                  selectedDay = day;
+                  if (!DateUtils.isSameMonth(day, displayedMonth)) {
+                    displayedMonth = day;
+                  }
+                  widget.onDaySelected?.call(day);
+                })
+              : null,
         );
       },
       dayHeaderBuilder: (i) => _YaruDayHeader(index: i),

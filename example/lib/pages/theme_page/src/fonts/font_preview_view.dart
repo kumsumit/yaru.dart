@@ -18,12 +18,13 @@ class _FontPreviewViewState extends State<FontPreviewView> {
   );
 
   FontWeight get _currentFontWeight => FontWeight.lerp(
-        FontWeight.w100,
-        FontWeight.w800,
-        (_fontWeightValue - 100) / 700,
-      )!;
+    FontWeight.w100,
+    FontWeight.w800,
+    (_fontWeightValue - 100) / 700,
+  )!;
 
-  FontStyle get _currentFontStyle => _isItalic ? FontStyle.italic : FontStyle.normal;
+  FontStyle get _currentFontStyle =>
+      _isItalic ? FontStyle.italic : FontStyle.normal;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,8 @@ class _FontPreviewViewState extends State<FontPreviewView> {
                   divisions: 7,
                   label: _fontWeightValue.round().toString(),
                   value: _fontWeightValue,
-                  onChanged: (value) => setState(() => _fontWeightValue = value),
+                  onChanged: (value) =>
+                      setState(() => _fontWeightValue = value),
                 ),
               ),
               Text(_fontWeightValue.round().toString()),
@@ -79,21 +81,17 @@ class _FontPreviewViewState extends State<FontPreviewView> {
             children: [
               const Text('Style:'),
               const SizedBox(width: 16),
-              Row(
-                children: [
-                  Radio<bool>(
-                    value: false,
-                    groupValue: _isItalic,
-                    onChanged: (v) => setState(() => _isItalic = v!),
-                  ),
-                  const Text('Normal'),
-                  Radio<bool>(
-                    value: true,
-                    groupValue: _isItalic,
-                    onChanged: (v) => setState(() => _isItalic = v!),
-                  ),
-                  const Text('Italic'),
-                ],
+              RadioGroup<bool>(
+                groupValue: _isItalic,
+                onChanged: (value) => setState(() => _isItalic = value!),
+                child: const Row(
+                  children: [
+                    Radio<bool>(value: false),
+                    Text('Normal'),
+                    Radio<bool>(value: true),
+                    Text('Italic'),
+                  ],
+                ),
               ),
             ],
           ),

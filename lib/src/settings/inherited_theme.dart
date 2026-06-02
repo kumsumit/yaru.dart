@@ -420,12 +420,8 @@ class YaruThemeData with Diagnosticable {
     properties.add(DiagnosticsProperty('visualDensity', visualDensity));
     properties.add(DiagnosticsProperty<bool>('statusShapes', statusShapes));
     properties.add(DiagnosticsProperty<bool>('focusBorders', focusBorders));
-    properties.add(
-      DiagnosticsProperty('leftButtonLayout', leftButtonLayout),
-    );
-    properties.add(
-      DiagnosticsProperty('rightButtonLayout', rightButtonLayout),
-    );
+    properties.add(DiagnosticsProperty('leftButtonLayout', leftButtonLayout));
+    properties.add(DiagnosticsProperty('rightButtonLayout', rightButtonLayout));
   }
 
   @override

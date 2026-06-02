@@ -242,18 +242,12 @@ class YaruTitleBar extends StatelessWidget implements PreferredSizeWidget {
       );
     }
 
-    Widget maybeHero({
-      required Widget child,
-      required Object? tag,
-    }) {
+    Widget maybeHero({required Widget child, required Object? tag}) {
       if (tag == null ||
           context.findAncestorWidgetOfExactType<Hero>() != null) {
         return child;
       }
-      return Hero(
-        tag: tag,
-        child: child,
-      );
+      return Hero(tag: tag, child: child);
     }
 
     final closeButton = YaruWindowControl(
@@ -264,17 +258,22 @@ class YaruTitleBar extends StatelessWidget implements PreferredSizeWidget {
       semanticLabel: closeSemanticLabel,
     );
 
-    final leftButtons = yaruTheme?.leftButtonLayout
+    final leftButtons =
+        yaruTheme?.leftButtonLayout
             ?.map(YaruWindowControlType.fromName)
             .toList() ??
         <YaruWindowControlType>[];
 
     leftButtons.removeWhere((e) => e == null);
 
-    final rightButtons = yaruTheme?.rightButtonLayout
+    final rightButtons =
+        yaruTheme?.rightButtonLayout
             ?.map(YaruWindowControlType.fromName)
             .toList() ??
         <YaruWindowControlType>[];
+
+    rightButtons.removeWhere((e) => e == null);
+    final useDefaultButtonLayout = leftButtons.isEmpty && rightButtons.isEmpty;
 
     final minimizeButton = YaruWindowControl(
       platform: windowControlPlatform,
@@ -306,19 +305,19 @@ class YaruTitleBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (isMinimizable == true &&
               (rightButtons.contains(YaruWindowControlType.minimize) ||
-                  leftButtons.isEmpty))
+                  useDefaultButtonLayout))
             minimizeButton,
           if (isRestorable == true &&
               (rightButtons.contains(YaruWindowControlType.maximize) ||
-                  leftButtons.isEmpty))
+                  useDefaultButtonLayout))
             restoreButton,
           if (isMaximizable == true &&
               (rightButtons.contains(YaruWindowControlType.maximize) ||
-                  leftButtons.isEmpty))
+                  useDefaultButtonLayout))
             maximizeButton,
           if (isClosable == true &&
               (rightButtons.contains(YaruWindowControlType.close) ||
-                  leftButtons.isEmpty))
+                  useDefaultButtonLayout))
             closeButton,
         ].withSpacing(bSpacing),
       ),
@@ -376,7 +375,8 @@ class YaruTitleBar extends StatelessWidget implements PreferredSizeWidget {
                   child: backdropEffect(leadingBlock)!,
                 )
               : leading,
-          leadingWidth: leadingWidth ??
+          leadingWidth:
+              leadingWidth ??
               (leftButtons.isEmpty ? null : leftButtons.length * 60),
           title: backdropEffect(title),
           centerTitle: centerTitle ?? titleBarTheme.centerTitle,
