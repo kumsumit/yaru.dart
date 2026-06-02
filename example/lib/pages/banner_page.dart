@@ -63,7 +63,7 @@ class _BannerState extends State<_Banner> {
       title: title,
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [description, if (thirdLine != null) thirdLine],
+        children: [description, ?thirdLine],
       ),
       icon: icon,
       onTap: () => showDialog(

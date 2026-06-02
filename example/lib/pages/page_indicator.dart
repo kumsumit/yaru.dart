@@ -28,7 +28,7 @@ class _PageIndicatorPageState extends State<PageIndicatorPage> {
               length: _length,
               page: _page,
               onTap: (page) => setState(() => _page = page),
-              itemSizeBuilder: (_, __, ___) => Size.square(_dotSize + 8),
+              itemSizeBuilder: (_, _, _) => Size.square(_dotSize + 8),
               layoutDelegate: YaruPageIndicatorSteppedDelegate(
                 baseItemSpacing: _dotSpacing,
               ),
@@ -46,7 +46,7 @@ class _PageIndicatorPageState extends State<PageIndicatorPage> {
               length: _length,
               page: _page,
               onTap: (page) => setState(() => _page = page),
-              itemSizeBuilder: (_, __, ___) => Size.square(_dotSize + 8),
+              itemSizeBuilder: (_, _, _) => Size.square(_dotSize + 8),
               layoutDelegate: YaruPageIndicatorSteppedDelegate(
                 baseItemSpacing: _dotSpacing,
               ),

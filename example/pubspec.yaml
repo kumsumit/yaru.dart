@@ -4,29 +4,33 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.27.1"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
-  collection: ^1.17.0
-  connectivity_plus: ^6.0.4
+  collection: ^1.19.1
+  connectivity_plus: ^7.1.1
   flutter:
     sdk: flutter
   flutter_highlight: ^0.7.0
-  handy_window: ^0.4.0
-  http: ^1.2.2
-  path: ^1.9.0
-  safe_change_notifier: ^0.3.2
-  universal_html: ^2.2.4
-  url_launcher: ^6.3.0
-  watch_it: ^1.5.1
+  handy_window: ^0.4.2
+  http: ^1.6.0
+  path: ^1.9.1
+  safe_change_notifier: ^0.4.0+1
+  universal_html: ^2.3.0
+  url_launcher: ^6.3.2
+  watch_it: ^2.4.2
   yaru:
     path: ../
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  dbus:
+    git: https://github.com/kumsumit/dbus.dart.git
 
 flutter:
   assets:
