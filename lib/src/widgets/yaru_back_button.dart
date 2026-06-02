@@ -48,6 +48,6 @@ class YaruBackButton extends StatelessWidget {
         }
       },
     );
-    return round ? Center(child: button) : button;
+    return button;
   }
 }

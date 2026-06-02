@@ -67,11 +67,11 @@ class YaruPopupMenuButton<T> extends StatelessWidget {
     return DecoratedBox(
       decoration: ShapeDecoration(shape: shape.copyWith(side: side)),
       child: Material(
-        color: style?.backgroundColor?.resolve({}) ?? Colors.transparent,
+        color: style?.backgroundColor?.resolve(state) ?? Colors.transparent,
         clipBehavior: Clip.antiAlias,
         shape: shape,
         child: PopupMenuButton(
-          iconColor: style?.foregroundColor?.resolve({}),
+          iconColor: style?.foregroundColor?.resolve(state),
           enabled: enabled,
           elevation: elevation,
           position: position,
@@ -93,7 +93,7 @@ class YaruPopupMenuButton<T> extends StatelessWidget {
                 child: DefaultTextStyle.merge(
                   style: TextStyle(
                     color:
-                        style?.foregroundColor?.resolve({}) ??
+                        style?.foregroundColor?.resolve(state) ??
                         Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w500,
                   ),
@@ -108,7 +108,9 @@ class YaruPopupMenuButton<T> extends StatelessWidget {
                             ? icon ??
                                   Icon(
                                     YaruIcons.pan_down,
-                                    color: style?.foregroundColor?.resolve({}),
+                                    color: style?.foregroundColor?.resolve(
+                                      state,
+                                    ),
                                     semanticLabel: semanticLabel,
                                   )
                             : null,

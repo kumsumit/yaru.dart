@@ -5,6 +5,27 @@ import 'package:yaru/yaru.dart';
 import '../yaru_golden_tester.dart';
 
 void main() {
+  testWidgets('rounded style does not change the layout wrapper', (
+    tester,
+  ) async {
+    late Widget builtButton;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            builtButton = const YaruBackButton(
+              style: YaruBackButtonStyle.rounded,
+            ).build(context);
+            return builtButton;
+          },
+        ),
+      ),
+    );
+
+    expect(builtButton, isA<YaruIconButton>());
+  });
+
   testWidgets(
     'golden images',
     (tester) async {

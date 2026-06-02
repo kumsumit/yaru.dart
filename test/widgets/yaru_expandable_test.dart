@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yaru/src/widgets/yaru_expandable.dart';
+import 'package:yaru/src/widgets/yaru_expansion_panel.dart';
 import 'package:yaru/src/widgets/yaru_icon_button.dart';
 
 const kHeaderText = 'Lorem ipsum dolor sit amet';
@@ -119,5 +120,65 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(isExpanded, isFalse);
+  });
+
+  testWidgets('childBuilder builds lazily once expanded', (tester) async {
+    var buildCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: YaruExpandable(
+            header: const Text(kHeaderText),
+            childBuilder: (context) {
+              buildCount++;
+              return const Text(kContentText);
+            },
+          ),
+        ),
+      ),
+    );
+
+    expect(buildCount, 0);
+    expect(find.text(kContentText), findsNothing);
+
+    await tester.tap(find.text(kHeaderText));
+    await tester.pumpAndSettle();
+    expect(buildCount, 1);
+    expect(find.text(kContentText), findsOneWidget);
+
+    await tester.tap(find.text(kHeaderText));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(kHeaderText));
+    await tester.pumpAndSettle();
+    expect(buildCount, 1);
+  });
+
+  testWidgets('expansion panel supports lazy child builders', (tester) async {
+    var buildCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: YaruExpansionPanel(
+            shrinkWrap: true,
+            headers: const [Text(kHeaderText)],
+            childBuilders: [
+              (context) {
+                buildCount++;
+                return const Text(kContentText);
+              },
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(buildCount, 0);
+
+    await tester.tap(find.text(kHeaderText));
+    await tester.pumpAndSettle();
+    expect(buildCount, 1);
+    expect(find.text(kContentText), findsOneWidget);
   });
 }

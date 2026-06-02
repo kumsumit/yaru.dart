@@ -22,13 +22,17 @@ class YaruExpandable extends StatefulWidget {
     this.expandIconPadding = EdgeInsets.zero,
     this.expandIconSemanticLabel,
     this.expandButtonPosition = YaruExpandableButtonPosition.end,
-    required this.child,
+    this.child,
+    this.childBuilder,
     this.collapsedChild,
     this.gapHeight = 4.0,
     this.isExpanded = false,
     this.onChange,
     this.usePadding = false,
-  });
+  }) : assert(
+         (child != null) != (childBuilder != null),
+         'Either a child or a childBuilder must be provided',
+       );
 
   /// Widget placed in the header, against the expand button.
   final Widget header;
@@ -48,7 +52,10 @@ class YaruExpandable extends StatefulWidget {
   final YaruExpandableButtonPosition expandButtonPosition;
 
   /// Widget show when expanded.
-  final Widget child;
+  final Widget? child;
+
+  /// Lazily builds the expanded child the first time this widget is expanded.
+  final WidgetBuilder? childBuilder;
 
   /// Widget show when collapsed.
   final Widget? collapsedChild;
@@ -79,6 +86,7 @@ class YaruExpandable extends StatefulWidget {
 
 class _YaruExpandableState extends State<YaruExpandable> {
   late bool _isExpanded;
+  Widget? _builtChild;
 
   @override
   void initState() {
@@ -91,6 +99,9 @@ class _YaruExpandableState extends State<YaruExpandable> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isExpanded != widget.isExpanded) {
       _isExpanded = widget.isExpanded;
+    }
+    if (oldWidget.childBuilder != widget.childBuilder) {
+      _builtChild = null;
     }
   }
 
@@ -143,7 +154,9 @@ class _YaruExpandableState extends State<YaruExpandable> {
           ),
         ),
         AnimatedCrossFade(
-          firstChild: _buildChild(widget.child),
+          firstChild: _isExpanded || _builtChild != null
+              ? _buildChild(_expandedChild)
+              : const SizedBox.shrink(),
           secondChild: widget.collapsedChild != null
               ? _buildChild(widget.collapsedChild!)
               : Container(),
@@ -178,4 +191,7 @@ class _YaruExpandableState extends State<YaruExpandable> {
       ],
     );
   }
+
+  Widget get _expandedChild =>
+      widget.child ?? (_builtChild ??= Builder(builder: widget.childBuilder!));
 }

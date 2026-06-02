@@ -31,6 +31,7 @@ class YaruSearchField extends StatefulWidget {
     this.focusNode,
     this.clearIcon,
     this.clearIconSemanticLabel,
+    this.decoration,
   });
 
   /// Optional [String] forwarded to the internal [TextEditingController]
@@ -83,6 +84,9 @@ class YaruSearchField extends StatefulWidget {
   /// Optional semantic label to add to the clear button icon.
   final String? clearIconSemanticLabel;
 
+  /// Optional decoration merged with the Yaru search field defaults.
+  final InputDecoration? decoration;
+
   @override
   State<YaruSearchField> createState() => _YaruSearchFieldState();
 }
@@ -90,21 +94,16 @@ class YaruSearchField extends StatefulWidget {
 class _YaruSearchFieldState extends State<YaruSearchField> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
+  late bool _isInputEmpty;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController(text: widget.text);
     _focusNode = widget.focusNode ?? FocusNode();
+    _isInputEmpty = _controller.text.isEmpty;
 
-    var isInputEmpty = _controller.text.isEmpty;
-    _controller.addListener(() {
-      if (isInputEmpty != _controller.text.isEmpty) {
-        setState(() {
-          isInputEmpty = _controller.text.isEmpty;
-        });
-      }
-    });
+    _controller.addListener(_handleControllerChanged);
   }
 
   @override
@@ -112,9 +111,12 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.controller != oldWidget.controller) {
+      _controller.removeListener(_handleControllerChanged);
       if (oldWidget.controller == null) _controller.dispose();
       _controller =
           widget.controller ?? TextEditingController(text: widget.text);
+      _isInputEmpty = _controller.text.isEmpty;
+      _controller.addListener(_handleControllerChanged);
     }
     if (widget.focusNode != oldWidget.focusNode) {
       if (oldWidget.focusNode == null) _focusNode.dispose();
@@ -124,6 +126,7 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
 
   @override
   void dispose() {
+    _controller.removeListener(_handleControllerChanged);
     if (widget.controller == null) _controller.dispose();
     if (widget.focusNode == null) _focusNode.dispose();
     super.dispose();
@@ -133,9 +136,10 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final light = theme.brightness == Brightness.light;
+    final highContrast = theme.colorScheme.isHighContrast;
 
     final border = OutlineInputBorder(
-      borderSide: widget.style == YaruSearchFieldStyle.filled
+      borderSide: widget.style == YaruSearchFieldStyle.filled && !highContrast
           ? BorderSide.none
           : BorderSide(
               color:
@@ -151,6 +155,46 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
     final suffixRadius = BorderRadius.only(
       topRight: widget.radius,
       bottomRight: widget.radius,
+    );
+    final defaultFillColor =
+        widget.fillColor ?? theme.inputDecorationTheme.fillColor;
+    final decoration = (widget.decoration ?? const InputDecoration()).copyWith(
+      filled:
+          widget.decoration?.filled ??
+          widget.style != YaruSearchFieldStyle.outlined,
+      border: widget.decoration?.border ?? border,
+      enabledBorder: widget.decoration?.enabledBorder ?? border,
+      errorBorder: widget.decoration?.errorBorder ?? border,
+      focusedBorder: widget.decoration?.focusedBorder ?? border,
+      contentPadding:
+          widget.decoration?.contentPadding ?? widget.contentPadding,
+      hintText: widget.decoration?.hintText ?? widget.hintText,
+      fillColor: widget.decoration?.fillColor ?? defaultFillColor,
+      hoverColor:
+          widget.decoration?.hoverColor ??
+          defaultFillColor?.scale(lightness: 0.1),
+      suffixIconConstraints:
+          widget.decoration?.suffixIconConstraints ??
+          const BoxConstraints(maxWidth: kYaruTitleBarItemHeight),
+      suffixIcon:
+          widget.decoration?.suffixIcon ??
+          (widget.onClear == null || _controller.text.isEmpty == true
+              ? null
+              : IconButton(
+                  style: IconButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: suffixRadius),
+                  ),
+                  onPressed: _clear,
+                  icon: ClipRRect(
+                    borderRadius: suffixRadius,
+                    child:
+                        widget.clearIcon ??
+                        Icon(
+                          YaruIcons.edit_clear,
+                          semanticLabel: widget.clearIconSemanticLabel,
+                        ),
+                  ),
+                )),
     );
 
     return KeyboardListener(
@@ -171,40 +215,7 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
           onSubmitted: widget.onSubmitted,
           onChanged: widget.onChanged,
           controller: _controller,
-          decoration: InputDecoration(
-            filled: widget.style != YaruSearchFieldStyle.outlined,
-            border: border,
-            enabledBorder: border,
-            errorBorder: border,
-            focusedBorder: border,
-            contentPadding: widget.contentPadding,
-            hintText: widget.hintText,
-            fillColor: widget.fillColor ?? theme.dividerColor,
-            hoverColor: (widget.fillColor ?? theme.dividerColor).scale(
-              lightness: 0.1,
-            ),
-            suffixIconConstraints: const BoxConstraints(
-              maxWidth: kYaruTitleBarItemHeight,
-            ),
-            suffixIcon:
-                widget.onClear == null || _controller.text.isEmpty == true
-                ? null
-                : IconButton(
-                    style: IconButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: suffixRadius),
-                    ),
-                    onPressed: _clear,
-                    icon: ClipRRect(
-                      borderRadius: suffixRadius,
-                      child:
-                          widget.clearIcon ??
-                          Icon(
-                            YaruIcons.edit_clear,
-                            semanticLabel: widget.clearIconSemanticLabel,
-                          ),
-                    ),
-                  ),
-          ),
+          decoration: decoration,
         ),
       ),
     );
@@ -213,6 +224,12 @@ class _YaruSearchFieldState extends State<YaruSearchField> {
   void _clear() {
     widget.onClear?.call();
     _controller.clear();
+  }
+
+  void _handleControllerChanged() {
+    if (_isInputEmpty != _controller.text.isEmpty) {
+      setState(() => _isInputEmpty = _controller.text.isEmpty);
+    }
   }
 }
 

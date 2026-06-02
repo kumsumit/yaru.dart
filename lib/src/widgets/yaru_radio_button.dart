@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
@@ -24,10 +22,10 @@ class YaruRadioButton<T> extends StatefulWidget {
   /// See [Radio.value]
   final T value;
 
-  /// See [Radio.groupValue]
+  /// See [RadioGroup.groupValue]
   final T? groupValue;
 
-  /// See [Radio.onChanged]
+  /// See [RadioGroup.onChanged]
   final ValueChanged<T?>? onChanged;
 
   /// See [YaruToggleButton.title]

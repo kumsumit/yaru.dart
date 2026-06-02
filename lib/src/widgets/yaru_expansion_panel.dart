@@ -9,7 +9,8 @@ class YaruExpansionPanel extends StatefulWidget {
   /// surrounded by a [YaruBorderContainer]
   const YaruExpansionPanel({
     super.key,
-    required this.children,
+    this.children,
+    this.childBuilders,
     this.borderRadius = const BorderRadius.all(
       Radius.circular(kYaruContainerRadius),
     ),
@@ -29,13 +30,25 @@ class YaruExpansionPanel extends StatefulWidget {
     this.scrollPhysics = const ClampingScrollPhysics(),
     this.collapseOnExpand = true,
     this.expandIconBuilder,
-  }) : assert(headers.length == children.length);
+  }) : assert(
+         (children != null) != (childBuilders != null),
+         'Either children or childBuilders must be provided',
+       ),
+       assert(children == null || headers.length == children.length),
+       assert(childBuilders == null || headers.length == childBuilders.length),
+       assert(
+         isInitiallyExpanded == null ||
+             headers.length == isInitiallyExpanded.length,
+       );
 
   /// A list of [Widget]s
   /// where each child is put it in a [YaruExpandable] as its child.
   /// The length mus be equal to the length of the [headers]
 
-  final List<Widget> children;
+  final List<Widget>? children;
+
+  /// Lazily built children corresponding to [headers].
+  final List<WidgetBuilder>? childBuilders;
 
   /// A list of [bool]s
   /// where each element defines if the corresponding [YaruExpandable]
@@ -108,13 +121,13 @@ class _YaruExpansionPanelState extends State<YaruExpansionPanel> {
     super.initState();
     _expandedStore = widget.isInitiallyExpanded != null
         ? List<bool>.from(widget.isInitiallyExpanded!)
-        : List<bool>.generate(widget.children.length, (index) => false);
+        : List<bool>.generate(_itemCount, (index) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.children.length == widget.headers.length);
-    assert(_expandedStore.length == widget.children.length);
+    assert(_itemCount == widget.headers.length);
+    assert(_expandedStore.length == _itemCount);
 
     return YaruBorderContainer(
       border: widget.border,
@@ -128,10 +141,10 @@ class _YaruExpansionPanelState extends State<YaruExpansionPanel> {
           ? ListView.separated(
               shrinkWrap: widget.shrinkWrap,
               physics: widget.scrollPhysics,
-              itemCount: widget.children.length,
+              itemCount: _itemCount,
               itemBuilder: _itemBuilder,
               separatorBuilder: (context, index) {
-                if (index != widget.children.length - 1) {
+                if (index != _itemCount - 1) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 1),
                     child: Divider(),
@@ -144,7 +157,7 @@ class _YaruExpansionPanelState extends State<YaruExpansionPanel> {
           : ListView.builder(
               shrinkWrap: widget.shrinkWrap,
               physics: widget.scrollPhysics,
-              itemCount: widget.children.length,
+              itemCount: _itemCount,
               itemBuilder: _itemBuilder,
             ),
     );
@@ -174,7 +187,10 @@ class _YaruExpansionPanelState extends State<YaruExpansionPanel> {
         padding: widget.headerPadding,
         child: widget.headers[index],
       ),
-      child: widget.children[index],
+      child: widget.children?[index],
+      childBuilder: widget.childBuilders?[index],
     );
   }
+
+  int get _itemCount => (widget.children ?? widget.childBuilders!).length;
 }

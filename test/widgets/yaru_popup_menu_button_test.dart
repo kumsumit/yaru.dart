@@ -68,6 +68,29 @@ void main() {
       reason: 'Should preserve parent styles',
     );
   });
+
+  testWidgets('resolves disabled foreground color', (tester) async {
+    await tester.pumpScaffold(
+      YaruPopupMenuButton(
+        enabled: false,
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? Colors.red
+                : Colors.green,
+          ),
+        ),
+        itemBuilder: (context) => [],
+        child: const Text('Menu'),
+      ),
+      themeMode: ThemeMode.light,
+    );
+
+    expect(
+      DefaultTextStyle.of(tester.element(find.text('Menu'))).style.color,
+      Colors.red,
+    );
+  });
 }
 
 final goldenVariant = ValueVariant({

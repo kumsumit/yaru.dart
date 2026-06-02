@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
@@ -41,10 +39,10 @@ class YaruRadioListTile<T> extends YaruToggleListTile {
   /// See [RadioListTile.value].
   final T value;
 
-  /// See [RadioListTile.groupValue].
+  /// See [RadioGroup.groupValue].
   final T? groupValue;
 
-  /// See [RadioListTile.onChanged].
+  /// See [RadioGroup.onChanged].
   final ValueChanged<T?>? onChanged;
 
   /// See [RadioListTile.toggleable].
