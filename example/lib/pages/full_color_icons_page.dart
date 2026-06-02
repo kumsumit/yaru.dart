@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
-import 'package:universal_html/html.dart' as html;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaru/yaru.dart';
 
@@ -67,9 +65,7 @@ class _FullColorIconsPageState extends State<FullColorIconsPage>
                               borderRadius: BorderRadius.circular(
                                 kYaruButtonRadius,
                               ),
-                              onTap: () => kIsWeb
-                                  ? html.window.open(icon, '')
-                                  : launchUrl(Uri.parse(icon)),
+                              onTap: () => launchUrl(Uri.parse(icon)),
                               child: Image.network(
                                 icon,
                                 filterQuality: FilterQuality.medium,

@@ -146,6 +146,33 @@ void main() {
     );
   });
 
+  testWidgets('popping a portrait detail page returns to the master list', (
+    tester,
+  ) async {
+    final navigatorKey = GlobalKey<NavigatorState>();
+    final controller = YaruPageController(length: 1);
+
+    await tester.pumpScaffold(
+      YaruMasterDetailPage(
+        controller: controller,
+        navigatorKey: navigatorKey,
+        breakpoint: double.infinity,
+        tileBuilder: (context, index, selected, availableWidth) =>
+            YaruMasterTile(title: Text('Tile $index')),
+        pageBuilder: (context, index) => Text('Detail $index'),
+      ),
+    );
+
+    controller.index = 0;
+    await tester.pumpAndSettle();
+    expect(find.text('Detail 0'), findsOneWidget);
+
+    navigatorKey.currentState!.pop();
+    await tester.pumpAndSettle();
+    expect(find.text('Detail 0'), findsNothing);
+    expect(find.text('Tile 0'), findsOneWidget);
+  });
+
   testWidgets('availableWidth is updated when pane resized in landscape', (
     tester,
   ) async {

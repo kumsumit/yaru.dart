@@ -81,6 +81,12 @@ class _YaruPortraitLayoutState extends State<YaruPortraitLayout> {
     widget.onSelected?.call(_selectedIndex);
   }
 
+  void _onDidRemovePage(Page<Object?> page) {
+    if (page.key == ValueKey(_selectedIndex)) {
+      setState(() => _selectedIndex = -1);
+    }
+  }
+
   MaterialPage page(int index) {
     return MaterialPage(
       key: ValueKey(index),
@@ -94,9 +100,7 @@ class _YaruPortraitLayoutState extends State<YaruPortraitLayout> {
   Widget build(BuildContext context) {
     final theme = YaruMasterDetailTheme.of(context);
     return PopScope(
-      // TODO: implement replacement if we keep YaruMasterDetailPage
-      // ignore: deprecated_member_use
-      onPopInvoked: (v) async => await _navigator.maybePop(),
+      onPopInvokedWithResult: (_, _) async => await _navigator.maybePop(),
       child: Theme(
         data: Theme.of(
           context,
@@ -106,12 +110,7 @@ class _YaruPortraitLayoutState extends State<YaruPortraitLayout> {
           initialRoute: widget.initialRoute,
           onGenerateRoute: widget.onGenerateRoute,
           onUnknownRoute: widget.onUnknownRoute,
-          // TODO: implement replacement if we keep YaruMasterDetailPage
-          // ignore: deprecated_member_use
-          onPopPage: (route, result) {
-            _selectedIndex = -1;
-            return route.didPop(result);
-          },
+          onDidRemovePage: _onDidRemovePage,
           pages: [
             MaterialPage(
               key: const ValueKey(-1),

@@ -9,9 +9,11 @@ on:
 
 jobs:
   publish:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: kuhnroyal/flutter-fvm-config-action/setup@v3
       - uses: bluefireteam/flutter-gh-pages@v9
         with:

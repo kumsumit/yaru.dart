@@ -35,7 +35,7 @@ This repository and package contains:
     dart pub global activate -sgit https://github.com/Jupi007/icon_font_generator.git --git-ref yaru
     ```
 
-- Source SVGs files are located inside `./icons`. The final icon name is determined by **subfolder_name** + **icon_name** (Ex: `icons/mimetype/text-plain.svg` will be named `mimetype_text_plain`).
+- Source SVG files are located inside `assets/icons`. The final icon name is determined by **subfolder_name** + **icon_name** (Ex: `assets/icons/mimetype/text-plain.svg` will be named `mimetype_text_plain`).
 
 - After modifying or adding icons, you must run the build script, which will generate the icon font:
 
@@ -46,8 +46,13 @@ This repository and package contains:
     or run
 
     ```bash
-    yaru_icon_font_generator assets/icons assets/yaru_icons.otf --output-class-file=lib/src/yaru_icons.dart -r
+    yaru_icon_font_generator assets/icons assets/yaru_icons.otf --output-class-file=lib/src/icons/yaru_icons.dart -r
     ```
+
+## Testing
+
+Run `flutter test --exclude-tags golden` for the portable widget test suite.
+Golden tests are generated and verified on Ubuntu 22.04 in CI.
 
 ## Contributing new gtk<->Flutter theme mappings
 
