@@ -3,20 +3,23 @@ description: Common flutter widgets useful for building desktop and web applicat
 homepage: https://github.com/ubuntu/yaru.dart
 issue_tracker: https://github.com/ubuntu/yaru.dart/issues
 version: 10.1.0
+publish_to: "none"
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   animated_vector: ^0.2.2
   animated_vector_annotations: ^0.2.2
-  assorted_layout_widgets: ^11.0.0
-  collection: ^1.17.0
-  dbus: ^0.7.10
+  assorted_layout_widgets: ^12.6.1
+  collection: ^1.19.1
+  dbus:
+    git: https://github.com/kumsumit/dbus.dart
   flutter:
     sdk: flutter
-  gsettings: ^0.2.8
+  gsettings:
+    git: https://github.com/kumsumit/gsettings.dart
   gtk: ^2.1.0
   platform: ^3.1.5
   platform_linux: ^0.1.2
