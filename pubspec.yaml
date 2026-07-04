@@ -14,16 +14,16 @@ dependencies:
     git: https://github.com/kumsumit/animated_vector.git
   animated_vector_annotations:
     git: https://github.com/kumsumit/animated_vector_annotations.git
-  assorted_layout_widgets: ^12.6.1
+  assorted_layout_widgets: ^12.6.2
   collection: ^1.19.1
   dbus:
     git: https://github.com/kumsumit/dbus.dart.git
   flutter:
     sdk: flutter
   gsettings:
-    git: https://github.com/kumsumit/gsettings.dart
+    git: https://github.com/kumsumit/gsettings.dart.git
   gtk: ^2.1.0
-  intl: ^0.20.0
+  intl: ^0.20.3
   platform: ^3.1.5
   platform_linux: ^0.1.2
   yaru_window: ^0.2.2
