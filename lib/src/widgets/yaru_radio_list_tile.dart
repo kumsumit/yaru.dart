@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:yaru/yaru.dart';
 
 /// A [ListTile] with a [YaruRadio]. In other words, a radio with a label.

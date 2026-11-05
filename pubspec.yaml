@@ -6,15 +6,15 @@ version: 10.2.0
 publish_to: "none"
 
 environment:
-  sdk: ">=3.12.0 <4.0.0"
-  flutter: ">=3.44.0"
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
 
 dependencies:
   animated_vector:
     git: https://github.com/kumsumit/animated_vector.git
   animated_vector_annotations:
     git: https://github.com/kumsumit/animated_vector_annotations.git
-  assorted_layout_widgets: ^12.6.2
+  assorted_layout_widgets: ^13.1.0
   collection: ^1.19.1
   dbus:
     git: https://github.com/kumsumit/dbus.dart.git
@@ -27,6 +27,7 @@ dependencies:
   platform: ^3.1.5
   platform_linux: ^0.1.2
   yaru_window: ^0.2.2
+  material_ui: ^1.10.0
 
 dev_dependencies:
   animated_vector_gen:
