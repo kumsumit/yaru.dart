@@ -10,12 +10,13 @@ import 'yaru_portrait_layout.dart';
 
 const _kDefaultPaneWidth = 280.0;
 
-typedef YaruMasterTileBuilder = Widget Function(
-  BuildContext context,
-  int index,
-  bool selected,
-  double availableWidth,
-);
+typedef YaruMasterTileBuilder =
+    Widget Function(
+      BuildContext context,
+      int index,
+      bool selected,
+      double availableWidth,
+    );
 
 typedef YaruAppBarBuilder = PreferredSizeWidget? Function(BuildContext context);
 

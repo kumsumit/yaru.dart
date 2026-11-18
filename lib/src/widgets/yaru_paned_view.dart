@@ -1,10 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:yaru/src/widgets/yaru_paned_view_layout_delegate.dart';
 
-typedef YaruPaneBuilder = Widget Function(
-  BuildContext context,
-  double availableSpace,
-);
+typedef YaruPaneBuilder =
+    Widget Function(BuildContext context, double availableSpace);
 
 class YaruPanedView extends StatefulWidget {
   const YaruPanedView({
