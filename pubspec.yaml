@@ -22,23 +22,27 @@ dependencies:
     sdk: flutter
   gsettings:
     git: https://github.com/kumsumit/gsettings.dart.git
-  gtk: ^2.1.0
+  gtk: ^2.2.0
   intl: ^0.20.3
-  platform: ^3.1.5
-  platform_linux: ^0.1.2
-  yaru_window: ^0.2.2
-  material_ui: ^1.10.0
+  material_ui: ^1.11.1
+  platform: ^3.2.0
+  platform_linux: ^0.1.4
+  yaru_window: 
+    git: https://github.com/kumsumit/yaru_window.git
+  
 
 dev_dependencies:
   animated_vector_gen:
     git: https://github.com/kumsumit/animated_vector_gen.git
-  build_runner: ^2.15.0
+  build_runner: ^2.16.1
   flutter_lints: ">=6.0.0 <7.0.0"
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.4
-  plugin_platform_interface: ^2.1.8
-  yaru_window_platform_interface: ^0.1.3
+  mocktail: ^1.0.5
+  plugin_platform_interface: 
+    git: https://github.com/kumsumit/plugin_platform_interface.git
+  yaru_window_platform_interface:
+    git: https://github.com/kumsumit/yaru_window_platform_interface.git
 
 flutter:
   fonts:

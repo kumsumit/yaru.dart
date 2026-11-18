@@ -108,7 +108,7 @@ class YaruTheme extends StatefulWidget {
          builder != null || child != null,
          'Either builder or child must be provided',
        ),
-       _platform = platform ?? const LocalPlatform(),
+       _platform = platform ?? const Platform(),
        _settings = settings;
 
   /// Builds the widget below this widget in the tree.
@@ -194,7 +194,9 @@ class _YaruThemeState extends State<YaruTheme> {
   bool canDetectGnome() {
     return !kIsWeb &&
         widget._platform.isLinux &&
-        !widget._platform.environment.containsKey('FLUTTER_TEST');
+        !(widget._platform.nativePlatform?.environment ?? const {}).containsKey(
+          'FLUTTER_TEST',
+        );
   }
 
   // This very simple but manual solution is the safest approach for now

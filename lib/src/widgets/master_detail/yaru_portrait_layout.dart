@@ -102,9 +102,8 @@ class _YaruPortraitLayoutState extends State<YaruPortraitLayout> {
     return PopScope(
       onPopInvokedWithResult: (_, _) async => await _navigator.maybePop(),
       child: Theme(
-        data: Theme.of(
-          context,
-        ).copyWith(pageTransitionsTheme: theme.portraitTransitions),
+        data: Theme.of(context)
+            .copyWith(pageTransitionsTheme: theme.portraitTransitions),
         child: Navigator(
           key: widget.navigatorKey,
           initialRoute: widget.initialRoute,
